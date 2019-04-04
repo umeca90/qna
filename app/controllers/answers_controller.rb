@@ -5,13 +5,16 @@ class AnswersController < ApplicationController
 
   def new; end
 
-  def edit
-    @answer = Answer.find(params[:id])
-  end
+  def edit; end
 
-  # def create
-  #   @answer = question.answer.new(answer_params)
-  # end
+  def create
+    @answer = question.answers.new(answer_params)
+    if @answer.save
+      redirect_to @answer
+    else
+      render :new
+    end
+  end
 
   private
 
@@ -25,7 +28,7 @@ class AnswersController < ApplicationController
   #
   # helper_method :question, :answer
   #
-  # def answer_params
-  #   params.require(:answer).permit(:body)
-  # end
+  def answer_params
+    params.require(:answer).permit(:body)
+  end
 end
