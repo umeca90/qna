@@ -5,5 +5,9 @@ FactoryBot.define do
     trait :invalid do
       body { nil }
     end
+    
+    trait :edit_body do
+      body { 'New body' }
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AnswersController < ApplicationController
   def index
     @answers = question.answers
@@ -16,18 +18,26 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    if answer.update(answer_params)
+      redirect_to answer
+    else
+      render :edit
+    end
+  end
+
   private
 
   def question
-    @question ||= Question.find(params[:question_id])
+    @question ||= params[:question_id] ? Question.find(params[:question_id]) : nil
   end
 
-  # def answer
-  #   @answer = params[:id] ? Answer.find(params[:id]) : Answer.new
-  # end
-  #
-  # helper_method :question, :answer
-  #
+  def answer
+    @answer = params[:id] ? Answer.find(params[:id]) : Answer.new
+  end
+
+  helper_method :question, :answer
+
   def answer_params
     params.require(:answer).permit(:body)
   end
