@@ -5,6 +5,10 @@ class AnswersController < ApplicationController
 
   def new; end
 
+  def edit
+    @answer = Answer.find(params[:id])
+  end
+
   # def create
   #   @answer = question.answer.new(answer_params)
   # end

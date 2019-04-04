@@ -23,4 +23,12 @@ RSpec.describe AnswersController, type: :controller do
       expect(response).to render_template :new
     end
   end
+
+  describe 'GET #edit' do
+    let(:answer) { create :answer, question: question }
+    it 'returns edit view' do
+      get :edit, params: { id: answer }
+      expect(response).to render_template :edit
+    end
+  end
 end
