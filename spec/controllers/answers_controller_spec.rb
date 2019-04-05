@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question: question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:answers) { create_list(:answer, 3, question: question) }
@@ -20,6 +21,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     it 'renders new view' do
       get :new, params: { question_id: question }
       expect(response).to render_template :new
@@ -27,6 +30,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
+    before { login(user) }
+
     it 'returns edit view' do
       get :edit, params: { id: answer }
       expect(response).to render_template :edit
@@ -34,6 +39,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new answer into database' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
@@ -55,6 +62,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'changes answer attributes' do
         patch :update, params: { question_id: question, id: answer, answer: attributes_for(:answer, :edit_body) }
