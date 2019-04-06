@@ -15,6 +15,8 @@ before_action :authenticate_user!, except: %i[index show]
 
   def create
     @question = Question.new(question_params)
+    @question.author = current_user
+
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
     else
@@ -31,8 +33,12 @@ before_action :authenticate_user!, except: %i[index show]
   end
 
   def destroy
-    question.destroy
-    redirect_to questions_path
+    if current_user.author_of?(question)
+      question.destroy
+      redirect_to questions_path, notice: 'Question was deleted.'
+    else
+      redirect_to questions_path
+    end
   end
 
   private

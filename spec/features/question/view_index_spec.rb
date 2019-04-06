@@ -7,7 +7,7 @@ feature 'User can view list of all questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:question, 3) }
+  given!(:questions) { create_list(:question, 3, author: user) }
 
   scenario 'User can look thru all questions' do
     visit questions_path

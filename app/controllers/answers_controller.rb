@@ -13,6 +13,8 @@ class AnswersController < ApplicationController
 
   def create
     @answer = question.answers.new(answer_params)
+    @answer.author = current_user
+
     if @answer.save
       redirect_to question, notice: 'Your answer was successfully created.'
     else
@@ -28,6 +30,14 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    if answer.destroy && current_user.author_of?(answer)
+      redirect_to answer.question, notice: 'Answer was deleted.'
+    else
+      render 'questions/show', notice: 'Something went wrong.'
+    end
+  end
+
   private
 
   def question
@@ -35,7 +45,7 @@ class AnswersController < ApplicationController
   end
 
   def answer
-    @answer = params[:id] ? Answer.find(params[:id]) : Answer.new
+    @answer ||= params[:id] ? Answer.find(params[:id]) : question.answer.new
   end
 
   helper_method :question, :answer

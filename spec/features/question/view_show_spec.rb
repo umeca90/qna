@@ -6,8 +6,8 @@ feature 'User can look certain question', %q{
   I'd like to be able to select question from list of all questions
 } do
   given(:user) { create(:user) }
-  given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question) }
+  given!(:question) { create(:question, author: user) }
+  given!(:answer) { create(:answer, question: question, author: user) }
 
   scenario 'User can look certain question' do
     visit question_path(question)
