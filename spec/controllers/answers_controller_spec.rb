@@ -47,16 +47,16 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 'redirects to created answer' do
         post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to assigns(:answer)
+        expect(response).to redirect_to assigns(:question)
       end
     end
     context 'with ivalid attributes' do
       it 'does not save answer into database' do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question } }.to_not change(Answer, :count)
       end
-      it 're-renders new view' do
+      it 're-renders questions/show view' do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question }
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
       end
     end
   end
@@ -85,8 +85,8 @@ RSpec.describe AnswersController, type: :controller do
 
         expect(answer.body).to eq 'MyText'
       end
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 're-renders questions/show view' do
+        expect(response).to render_template 'questions/show'
       end
     end
   end
