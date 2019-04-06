@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User can create  a question', %q{
+feature 'User can create a question', %q{
   In order to get an answer from community
   As an aunthenticated user
   I'd like to be able to ask the question
