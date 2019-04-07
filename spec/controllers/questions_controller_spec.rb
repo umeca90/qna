@@ -57,11 +57,18 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to(assigns(:question))
       end
+
+      it 'verifies if user is the author' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).author).to eq user
+      end
+
     end
     context 'with invalid attributes' do
       it 'does not save the question' do
         expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
       end
+
       it 'renders new view' do
         post :create, params: { question: attributes_for(:question, :invalid) }
         expect(response).to render_template :new
@@ -76,6 +83,7 @@ RSpec.describe QuestionsController, type: :controller do
         patch :update, params: { id: question, question: attributes_for(:question) }
         expect(assigns(:question)).to eq question
       end
+
       it 'changes question attributes' do
         patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
         question.reload
@@ -83,6 +91,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
+
       it 'redirects to updated question' do
         patch :update, params: { id: question, question: attributes_for(:question) }
         expect(response).to redirect_to question
@@ -97,6 +106,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq 'MyString'
         expect(question.body).to eq 'MyText'
       end
+
       it 're-renders view' do
         expect(response).to render_template :edit
       end

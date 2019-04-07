@@ -47,7 +47,11 @@ before_action :authenticate_user!, except: %i[index show]
     @question ||= params[:id] ? Question.find(params[:id]) : Question.new
   end
 
-  helper_method :question
+  def answer
+    @answer = question.answers.new
+  end
+
+  helper_method :question, :answer
 
   def question_params
     params.require(:question).permit(:title, :body)

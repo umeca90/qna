@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: %i[index]
-
-  def index
-    @answers = question.answers
-  end
-
-  def new; end
-
-  def edit; end
+  before_action :authenticate_user!
 
   def create
     @answer = question.answers.new(answer_params)
@@ -31,11 +23,12 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if answer.destroy && current_user.author_of?(answer)
-      redirect_to answer.question, notice: 'Answer was deleted.'
-    else
-      render 'questions/show', notice: 'Something went wrong.'
+    if current_user.author_of?(answer)
+      answer.destroy
+      flash[:alert] = 'Answer was deleted.'
     end
+
+    redirect_to question_path(answer.question)
   end
 
   private
