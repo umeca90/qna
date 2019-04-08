@@ -37,7 +37,9 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'slim-rails'
 gem 'devise'
+# UI
 gem 'bootstrap'
+gem 'sassc-rails'
 gem 'jquery-rails'
 
 group :development, :test do

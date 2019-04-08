@@ -9,6 +9,8 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   body
     = render 'layouts/header'
-    p.notice= notice
-    p.alert= alert
-    = yield
+    main.main.bg-light
+      .comtainer
+        p.notice= notice
+        p.alert= alert
+        = yield

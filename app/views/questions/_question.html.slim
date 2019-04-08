@@ -3,5 +3,4 @@ tr
   td= question.body
   td
     - if current_user&.author_of?(question)
-      = link_to 'Delete question', question_path(question), method: :delete,
-                                                            remote: :true
+      = link_to 'Delete question', question_path(question), method: :delete
