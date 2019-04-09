@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question },format: :js }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to question' do
+      it 'renders create template' do
         post :create, params: {  question_id: question, answer: attributes_for(:answer), format: :js }
         expect(response).to render_template :create
       end
@@ -43,32 +43,28 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer) { create(:answer, question: question, author: user) }
 
     context 'with valid attributes' do
+      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :edit_body) }, format: :js }
+
       it 'changes answer attributes' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :edit_body) }, format: :js
         answer.reload
 
         expect(answer.body).to eq 'New body'
       end
 
-      it 'renders updates view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
+      it 'renders update view' do
         expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js }
-
       it 'does not change answer' do
-        answer.reload
-
         expect do
           patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         end.to_not change(answer, :body)
-
       end
 
       it 're-renders update template' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :update
       end
     end
@@ -82,27 +78,27 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user1) }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: { id: answer },format: :js }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(question.answers, :count).by(-1)
       end
 
-      it 'renders destroy template' do
-        delete :destroy, params: { id: answer },format: :js
+      it 'expects response to have 200 status' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to render_template :destroy
+        expect(response).to have_http_status(200)
       end
     end
 
-    context 'Not author' do
+    context 'Not an author' do
       before { login(user) }
 
       it 'deletes the answer' do
         expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'renders destroy template' do
+      it 'expects response to have 403 status' do
         delete :destroy, params: { id: answer }, format: :js
 
-        expect(response).to render_template :destroy
+        expect(response).to have_http_status(403)
       end
     end
 

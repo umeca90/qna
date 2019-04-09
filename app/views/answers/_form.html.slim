@@ -1,5 +1,5 @@
 - if user_signed_in?
-  = form_with model: [question, answer] do |f|
+  = form_with model: [question, answer], remote: true, class: 'answer-body' do |f|
     p
       = f.label :body
       = f.text_area :body

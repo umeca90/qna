@@ -1,5 +1,7 @@
 . class="answer_#{answer.id}"
+  .answer-update-errors
   p = answer.body
+
   - if (user_signed_in? && current_user&.author_of?(answer)) && answer.persisted?
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
