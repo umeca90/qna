@@ -24,6 +24,15 @@ class AnswersController < ApplicationController
     flash.now[:alert] = 'Answer was deleted.'
   end
 
+  def select_best
+    if current_user.author_of?(answer.question)
+      answer.set_the_best
+      @question = answer.question
+    else
+      head 403
+    end
+  end
+
   private
 
   def answers_author!
