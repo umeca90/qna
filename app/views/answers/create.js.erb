@@ -1,4 +1,4 @@
-$('.answer-create-errors').html('<%= render 'shared/errors', resource: answer %>');
+$('.answer-errors').html('<%= render 'shared/errors', resource: answer %>');
 $('.flash').append('<%= render 'shared/flash' %>').delay(1000).fadeOut('slow');
 <% if answer.persisted? %>
   $('.answers').append('<%= j render answer %>');

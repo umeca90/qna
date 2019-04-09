@@ -1,5 +1,5 @@
 $('.flash').append('<%= render 'shared/flash' %>').delay(1000).fadeOut('slow');
-$('.answer-update-errors').html('<%= render 'shared/errors', resource: answer %>');
+$('.answer-errors').html('<%= render 'shared/errors', resource: answer %>');
 <% if !answer.errors.present? %>
   $('.answers').html('<%= j render @question.answers %>');
 <% end %>

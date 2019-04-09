@@ -80,51 +80,82 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
         question.reload
 
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
 
-      it 'redirects to updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+      it 'renders update template' do
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
-      it 'does not change question' do
-        question.reload
 
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+      it 'does not change question' do
+        expect do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        end.to_not change(question, :title)
       end
 
-      it 're-renders view' do
-        expect(response).to render_template :edit
+      it 'renders update views' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+
+        expect(response).to render_template :update
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
+    let!(:user1) { create :user }
+    let!(:question) { create :question, author: user1 }
 
-    let!(:question) { create(:question, author: user) }
+    context 'User as an author' do
+      before { login(user1) }
 
-    it 'deletes the question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      it 'deletes gis question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'User as not an author' do
+      before { login(user) }
+
+      it 'tries to delete a question' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'return unauthenticated status' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to have_http_status(403)
+      end
+    end
+
+    context 'Unauthenticated user' do
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirect to login' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
-end
+  end

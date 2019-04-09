@@ -1,7 +1,9 @@
-h1 = question.title
-p = question.body
+.question-errors
+.question
+  = render 'question_partial'
+
 .answers
+  .answer-errors
   = render question.answers
-.answer-create-errors
-.answer-create
-= render 'answers/form'
+- if user_signed_in?
+  = render 'answers/form'

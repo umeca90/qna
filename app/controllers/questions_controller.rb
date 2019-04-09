@@ -2,6 +2,7 @@
 
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
+  before_action :questions_author!, only: %i[update destroy]
 
   def index
     @questions = Question.all
@@ -25,23 +26,20 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    question.update(question_params)
+    flash.now[:notice] = 'Question was updated.'
   end
 
   def destroy
-    if current_user.author_of?(question)
-      question.destroy
-      redirect_to questions_path, notice: 'Question was deleted.'
-    else
-      redirect_to questions_path
-    end
+    question.destroy
+    redirect_to questions_path, notice: 'Question was deleted.'
   end
 
   private
+
+  def questions_author!
+    head :forbidden unless current_user&.author_of?(question)
+  end
 
   def question
     @question ||= params[:id] ? Question.find(params[:id]) : Question.new

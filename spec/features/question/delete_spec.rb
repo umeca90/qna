@@ -8,12 +8,12 @@ feature 'User can delete a question', %q{
 
   given(:user1) { create(:user) }
   given(:user2) { create(:user) }
-  given!(:question) { create(:question, author: user1) }
+  given(:question) { create(:question, author: user1) }
 
   describe 'Authenticated user' do
     scenario 'user is the author of the question' do
       sign_in(user1)
-      visit questions_path
+      visit question_path(question)
       click_on 'Delete question'
 
       expect(page).to have_content 'Question was deleted.'
@@ -23,7 +23,7 @@ feature 'User can delete a question', %q{
 
     scenario 'user is not the author of the question' do
       sign_in(user2)
-      visit questions_path
+      visit question_path(question)
 
       expect(page).to_not have_link 'Delete question'
     end
