@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class QuestionsController < ApplicationController
-before_action :authenticate_user!, except: %i[index show]
+  before_action :authenticate_user!, except: %i[index show]
 
   def index
     @questions = Question.all

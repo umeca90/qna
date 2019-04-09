@@ -6,29 +6,30 @@ class AnswersController < ApplicationController
   def create
     @answer = question.answers.new(answer_params)
     @answer.author = current_user
-
     if @answer.save
-      redirect_to question, notice: 'Your answer was successfully created.'
+      flash.now[:notice] = 'Your answer was successfully created.'
     else
-      render 'questions/show'
+      flash.now[:alert] = 'Something went wrong'
     end
+    # @answer = current_user.answers.create(answer_params.merge(question_id: question.id))
   end
 
   def update
-    if answer.update(answer_params)
-      redirect_to answer
-    else
-      render 'questions/show'
-    end
+    answer.update(answer_params)
+    # if answer.update(answer_params)
+    #   redirect_to answer
+    # else
+    #   render 'questions/show'
+    # end
+    @question = answer.question
   end
 
   def destroy
+    @question = answer.question
     if current_user.author_of?(answer)
       answer.destroy
-      flash[:alert] = 'Answer was deleted.'
+      flash.now[:alert] = 'Answer was deleted.'
     end
-
-    redirect_to question_path(answer.question)
   end
 
   private
@@ -38,7 +39,7 @@ class AnswersController < ApplicationController
   end
 
   def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : question.answer.new
+    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
   end
 
   helper_method :question, :answer
