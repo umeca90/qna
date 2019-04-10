@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-feature 'User can delete files attached to his question', %q{
-  In order to delete files for your question
-  As an author of the question
-  I'd like to be able to delete files for my question
+feature 'User can delete files attached to his answer', %q{
+  In order to delete files for your answer
+  As an author of the answer
+  I'd like to be able to delete files for my answer
 } do
 
   given!(:user) { create :user }
   given!(:question) { create :question, author: user }
+  given!(:answer) { create :answer, author: user, question: question }
 
   scenario 'Unauthenticated can not delete files' do
     visit question_path(question)
@@ -22,17 +23,18 @@ feature 'User can delete files attached to his question', %q{
 
       click_on 'Edit question'
 
-      within '.question' do
+      within '.answers' do
+        click_on 'Edit'
         attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-        click_on 'Save question'
+        click_on 'Save'
       end
     end
 
-    scenario "deletes his question's file" do
-      within '.question' do
-        click_on 'Edit question'
+    scenario "deletes his answers's file" do
+      within '.answers' do
+        click_on 'Edit'
 
-        within ".file-#{question.files.first.id}" do
+        within ".file-#{answer.files.first.id}" do
           click_on 'Delete file'
         end
 
