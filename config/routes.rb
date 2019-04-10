@@ -6,4 +6,6 @@ Rails.application.routes.draw do
       patch 'select_best', on: :member
     end
   end
+
+  resources :files, only: %i[destroy]
 end
