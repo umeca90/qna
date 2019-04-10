@@ -26,7 +26,7 @@ feature 'User can create a question', %q{
       expect(page).to have_content 'text text text'
     end
 
-    scenario 'asks a question and attach file' do
+    scenario 'asks a question and attach files' do
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'text text text'
 

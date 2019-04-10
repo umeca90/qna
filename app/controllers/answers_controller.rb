@@ -40,7 +40,7 @@ class AnswersController < ApplicationController
   end
 
   def question
-    @question ||= params[:question_id] ? Question.find(params[:question_id]) : nil
+    @question ||= params[:question_id] ? Question.with_attached_files.find(params[:question_id]) : nil
   end
 
   def answer
@@ -50,6 +50,6 @@ class AnswersController < ApplicationController
   helper_method :question, :answer
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body,files: [])
   end
 end
