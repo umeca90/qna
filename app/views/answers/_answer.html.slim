@@ -4,11 +4,11 @@
   - if current_user&.author_of?(answer.question)
     = link_to 'Set the Best', select_best_answer_path(answer), method: :patch, remote: true, class: 'best-answer'
 
-  - if (user_signed_in? && current_user&.author_of?(answer)) && answer.persisted?
+  - if current_user&.author_of?(answer) && answer.persisted?
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     '  |
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-    = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
       = f.text_area :body
       = f.submit 'Save'
