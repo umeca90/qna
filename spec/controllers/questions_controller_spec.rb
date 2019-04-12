@@ -23,6 +23,14 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns am answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns a new link for answer' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end
   end
 
   describe 'GET #new' do
