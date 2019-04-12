@@ -6,7 +6,8 @@ class GistService
   end
 
   def call
-    @client.gist(@gist)
+    result = @client.gist(@gist)
+    result.files.to_hash.first[0].to_s
   end
 
   private

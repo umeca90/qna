@@ -4,15 +4,14 @@ class Link < ApplicationRecord
   validates :name, presence: true
   validates :url, presence: true, url: true
 
-  GIST_MASK = /^https:\/\/gist\.github\.com\/\w+\/\w+/i
+  GIST_REGEXP = /^https:\/\/gist\.github\.com\/\w+\/\w+/i
 
-  def gist_url_id
+  def gist_body
     gist_id = self.url.split('/').last
-    result = GistService.new(gist_id).call
-    result.files.to_hash.first[0]
+    GistService.new(gist_id).call
   end
 
   def gist?
-    self.url.match?(GIST_MASK)
+    self.url.match?(GIST_REGEXP)
   end
 end

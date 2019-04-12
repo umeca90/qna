@@ -20,7 +20,7 @@ br
   ul
     - question.links.each do |link|
       - if link.gist?
-        p= link.gist_url_id
+        p= link.gist_body
       li= link_to link.name, link.url
 
 
