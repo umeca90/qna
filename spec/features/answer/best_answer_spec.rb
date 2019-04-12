@@ -27,9 +27,8 @@ feature 'User can set best answer', %q{
 
       scenario 'selects only one best answer and sees it at the top' do
         best_answer = answers[2]
-        within(".answer_#{best_answer.id}") { click_on 'Set the Best' }
+        within(".answer-#{best_answer.id}") { click_on 'Set the Best' }
         first_answer = find('.answers').first(:element)
-
         within first_answer do
           expect(page).to have_content best_answer.body
         end
@@ -39,8 +38,8 @@ feature 'User can set best answer', %q{
         best_answer = answers[2]
         new_best_answer = answers[1]
 
-        within(".answer_#{best_answer.id}") { click_on 'Set the Best' }
-        within(".answer_#{new_best_answer.id}") { click_on 'Set the Best' }
+        within(".answer-#{best_answer.id}") { click_on 'Set the Best' }
+        within(".answer-#{new_best_answer.id}") { click_on 'Set the Best' }
 
         first_answer = find('.answers').first(:element)
 

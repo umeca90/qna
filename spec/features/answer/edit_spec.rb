@@ -59,7 +59,7 @@ feature 'User can edit his answer', %q{
     end
 
     scenario "tries to edit other user's question", js: true do
-      within(".answer_#{answer2.id}") do
+      within(".answer-#{answer2.id}") do
         expect(page).to have_content(answer2.body)
         expect(page).not_to have_link 'Edit'
       end

@@ -16,7 +16,7 @@ feature 'User can create an answer', %q{
       end
 
       scenario 'create an answer' do
-        fill_in 'Body', with: 'text body'
+        fill_in 'Answer body', with: 'text body'
         click_on 'Create answer'
 
         expect(page).to have_content 'Your answer was successfully created.'
@@ -24,7 +24,7 @@ feature 'User can create an answer', %q{
       end
 
       scenario 'creates an answer and attach files' do
-        fill_in 'Body', with: 'text text text'
+        fill_in 'Answer body', with: 'text text text'
 
         attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Create answer'

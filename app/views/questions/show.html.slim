@@ -1,7 +1,6 @@
-.question-errors
 .question
-  = render 'question_partial'
-
+  .question-errors
+    = render 'question_partial'
 .answers
   .answer-errors
   = render question.answers.sort_by_best

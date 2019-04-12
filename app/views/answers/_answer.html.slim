@@ -1,10 +1,17 @@
-. class="answer_#{answer.id}"
+. class="answer-#{answer.id}"
   .answer-update-errors
   p = answer.body
+
+  .links
+    p Links:
+    ul
+      - answer.links.each do |link|
+        li= link_to link.name, link.url, remote: true
+
   - if answer.files.attached?
     - answer.files.each do |file|
       . class="file-#{file.id}"
-        = link_to file.filename.to_s, url_for(file)
+        = link_to file.filename.to_s, url_for(file), remote: true
         - if current_user&.author_of?(answer)
           '  |
           = link_to 'Delete file', file_path(file), method: :delete, remote: true
@@ -16,7 +23,7 @@
   - if current_user&.author_of?(answer) && answer.persisted?
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     '  |
-    = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+    = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }, remote: true
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       p
         = f.label :body, 'Your answer'

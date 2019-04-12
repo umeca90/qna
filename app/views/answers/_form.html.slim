@@ -1,10 +1,19 @@
-- if user_signed_in?
-  = form_with model: [question, answer], remote: true, class: 'answer-body' do |f|
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
+= form_with model: [question, @answer], class: 'answer-body' do |f|
+  p
+    = f.label :body, 'Answer body'
+    = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
 
-    p = f.submit 'Create answer'
+  p Links:
+  p
+    = f.fields_for :links do |l|
+      p
+        = l.label :name, 'Link name'
+        = l.text_field :name
+      p
+        = l.label :url
+        = l.text_field :url
+
+  p= f.submit 'Create answer'
