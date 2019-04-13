@@ -1,12 +1,18 @@
 . class="answer-#{answer.id}"
   .answer-update-errors
   p = answer.body
-
-  .links
-    p Links:
-    ul
-      - answer.links.each do |link|
-        li= link_to link.name, link.url, remote: true
+  - if current_user&.author_of?(answer.question)
+    br
+    .links
+      p Links:
+      ul
+        - answer.links.each do |link|
+          - if link.gist?
+            p= link.gist_body
+          . class="link-#{link.id}"
+            = link_to link.name, link.url
+            '  |
+            = link_to "Remove answer's link", link_path(link), method: :delete, remote: true
 
   - if answer.files.attached?
     - answer.files.each do |file|
