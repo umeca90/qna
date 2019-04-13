@@ -19,6 +19,8 @@ feature 'User can edit his answer', %q{
   end
 
   describe 'Aunthenticated user' do
+    given!(:url) { 'http://google.com' }
+
     background do
       sign_in user
       visit question_path(question)
@@ -55,6 +57,17 @@ feature 'User can edit his answer', %q{
 
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
+    scenario 'edits link attached to answer', js: true do
+      within '.answers' do
+        click_on 'Edit'
+        click_on 'Add link'
+        fill_in 'Link name', with: 'Google'
+        fill_in 'Url', with: url
+        click_on 'Save'
+        expect(page).to have_link 'Google'
       end
     end
 

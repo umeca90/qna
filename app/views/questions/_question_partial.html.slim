@@ -37,4 +37,8 @@ h2 = question.body
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+    p
+      = f.fields_for :links do |l|
+      .links
+        = link_to_add_association 'Add link', f, :links, partial: 'partials/link_fields'
     = f.submit 'Save question'

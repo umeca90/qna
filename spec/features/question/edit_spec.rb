@@ -16,6 +16,8 @@ feature 'User can edit his question', %q{
   end
 
   describe 'Authenticated user as author', js: true do
+    given!(:url) { 'http://google.com' }
+
     background do
       sign_in user
       visit question_path(question)
@@ -39,15 +41,19 @@ feature 'User can edit his question', %q{
     scenario 'edits his question with errors' do
       within '.question' do
         fill_in 'Title', with: ''
+        click_on 'Add link'
+        fill_in 'Link name', with: 'Google'
+        fill_in 'Url', with: 'invalid.cpm'
         click_on 'Save question'
 
         expect(page).to have_content question.title
       end
 
       expect(page).to have_content "Title can't be blank"
+      expect(page).to have_content "Links url is not a valid URL"
     end
 
-    scenario 'edits his qoestion with attachments' do
+    scenario 'edits his question with attachments' do
       within '.question' do
         fill_in 'Title', with: 'new title'
         fill_in 'Body', with: 'new body'
@@ -62,6 +68,17 @@ feature 'User can edit his question', %q{
         expect(page).to have_link 'spec_helper.rb'
       end
     end
+
+    scenario 'edits link attached to question' do
+      within '.question' do
+        click_on 'Add link'
+        fill_in 'Link name', with: 'Google'
+        fill_in 'Url', with: url
+        click_on 'Save question'
+        expect(page).to have_link 'Google'
+      end
+    end
+
   end
 
   describe 'Authenticated user as not author', js: true do

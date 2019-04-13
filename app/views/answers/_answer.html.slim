@@ -30,6 +30,8 @@
     = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     '  |
     = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }, remote: true
+
+
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
       p
         = f.label :body, 'Your answer'
@@ -37,5 +39,9 @@
       p
         = f.label :files
         = f.file_field :files, multiple: true, direct_upload: true
+      p
+        = f.fields_for :links do |l|
+        .links
+          = link_to_add_association 'Add link', f, :links, partial: 'partials/link_fields'
       p
         = f.submit 'Save'
