@@ -15,4 +15,13 @@
       = render 'partials/link_fields',  f: link
     .links
       = link_to_add_association 'add link', f, :links, partial: 'partials/link_fields'
+  p Award:
+  p
+    = f.fields_for :award do |b|
+      p
+        = b.label :name
+        = b.text_field :name
+      p
+        = b.label :image
+        = b.file_field :image
   p= f.submit 'Ask'

@@ -38,6 +38,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     before { get :new }
 
+    it 'assigns a new award to Question' do
+      expect(assigns(:award)).to be_a_new(Award)
+    end
+
     it 'renders new view' do
       expect(response).to render_template :new
     end

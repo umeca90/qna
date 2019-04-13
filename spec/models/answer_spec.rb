@@ -19,6 +19,16 @@ RSpec.describe Answer, type: :model do
     let!(:answer) { create :answer, question: question, author: user }
     let!(:answer1) { create :answer, question: question, author: user }
 
+    context 'award' do
+      let!(:award) { create :award, question: question }
+
+      it 'take assignes award to user' do
+        answer.set_the_best
+
+        expect(award.user).to eq answer.author
+      end
+    end
+
     it 'sets the best answer attribute' do
       answer.set_the_best
 
