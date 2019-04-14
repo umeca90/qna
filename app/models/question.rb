@@ -10,6 +10,5 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :award, reject_if: :all_blank
 
   belongs_to :author, class_name: 'User'
-  
   validates :title, :body, presence: true
 end

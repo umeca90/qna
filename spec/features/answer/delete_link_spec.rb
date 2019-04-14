@@ -24,8 +24,8 @@ feature 'User can delete attached to answer link', %q{
     end
 
     scenario 'as an author of answer deletes attached link' do
-      within('.answers') do
-        click_on "Remove answer's link"
+      within('.answer-links') do
+        click_on "Remove link"
         expect(page).to_not have_content link.name
       end
       expect(page).to have_content 'Link was successfully removed.'
