@@ -4,6 +4,7 @@ class Answer < ApplicationRecord
 
   include FilesAttachable
   include LinksAttachable
+  include Votable
 
   belongs_to :question
   belongs_to :author, class_name: 'User'
