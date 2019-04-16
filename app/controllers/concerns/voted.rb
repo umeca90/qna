@@ -30,7 +30,7 @@ module Voted
 
       render json: { resourceName: @object.class.name.downcase,
                      resourceId: @object.id,
-                     resourceScore: @object.show_rating }
+                     resourceScore: @object.rating }
     else
       head :forbidden
     end

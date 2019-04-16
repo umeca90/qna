@@ -28,7 +28,7 @@ RSpec.shared_examples 'voted' do
       end.to change(Vote, :count).by 1
     end
 
-    it 'expect author is able to vote for self resources' do
+    it 'expect author is unable to vote for self resources' do
       login(model.author)
       post :vote_down, params: { id: model }, format: :json
 

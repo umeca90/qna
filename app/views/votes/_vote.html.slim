@@ -4,7 +4,7 @@
       method: :patch,
       remote: true
 span.score
-  = resource.show_rating
+  = resource.rating
 = link_to '', polymorphic_path(resource, action: :vote_down),
       role:   'button',
       class:  'fa fa-caret-down vote',

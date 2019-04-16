@@ -8,31 +8,31 @@ RSpec.shared_examples 'votable' do
     model.vote_up(user_2)
     model.reload
 
-    expect(model.show_rating).to eq 1
+    expect(model.rating).to eq 1
   end
 
   it '#method vote_up as author' do
     model.vote_up(user)
     model.reload
 
-    expect(model.show_rating).to eq 1
+    expect(model.rating).to eq 1
   end
 
   it '#method vote_down' do
     model.vote_down(user_2)
     model.reload
 
-    expect(model.show_rating).to eq -1
+    expect(model.rating).to eq -1
   end
 
   it '#method vote_down as author' do
     model.vote_down(user)
     model.reload
 
-    expect(model.show_rating).to eq -1
+    expect(model.rating).to eq -1
   end
 
-  it '#method show_rating' do
+  it '#method rating' do
     model.vote_up(user_2)
     model.vote_up(user_2)
     model.vote_down(user_2)
@@ -40,6 +40,6 @@ RSpec.shared_examples 'votable' do
     model.vote_up(user_4)
     model.reload
 
-    expect(model.show_rating).to eq 2
+    expect(model.rating).to eq 2
   end
 end
