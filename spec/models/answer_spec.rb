@@ -47,5 +47,9 @@ RSpec.describe Answer, type: :model do
 
       expect(Answer.all.sort_by_best.first).to eq answer1
     end
+
+    it_behaves_like 'votable' do
+      let(:model) { create :answer, question: question, author: user }
+    end
   end
 end
