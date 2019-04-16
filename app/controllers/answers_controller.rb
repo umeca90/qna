@@ -7,17 +7,8 @@ class AnswersController < ApplicationController
   def create
     @answer = question.answers.new(answer_params)
     @answer.author = current_user
-
-    respond_to do |format|
-      if @answer.save
-        flash.now[:notice] = 'Your answer was successfully created.'
-        format.json { render json: @answer }
-      else
-        format.json do
-          render json: @answer.errors.full_messages,
-                 status: :unprocessable_entity
-        end
-      end
+    if @answer.save
+      flash.now[:notice] = 'Your answer was successfully created.'
     end
   end
 

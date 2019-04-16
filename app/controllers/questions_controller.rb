@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :questions_author!, only: %i[update destroy]
 
+  include Voted
+
   def index
     @questions = Question.all
   end

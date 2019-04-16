@@ -44,6 +44,7 @@ gem "aws-sdk-s3", require: false
 gem "cocoon"
 gem 'validate_url'
 gem "octokit"
+gem 'font-awesome-sass', '~> 5.8', '>= 5.8.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
