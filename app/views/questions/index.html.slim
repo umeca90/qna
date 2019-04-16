@@ -8,7 +8,7 @@ table.table.table-striped
         | Question title
       th scope="col"
         | Question ID
-
+        .questions
         = render @questions
   p= link_to 'Ask question', new_question_path, class: 'nav-link'
 

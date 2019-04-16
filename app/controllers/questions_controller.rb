@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :questions_author!, only: %i[update destroy]
 
+  after_action :publish_question, only: %i[create]
+
   include Voted
 
   def index
@@ -44,6 +46,17 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast(
+        'questions',
+        ApplicationController.render(
+        partial: 'questions/question',
+        locals: { question: @question}
+        )
+    )
+  end
 
   def questions_author!
     head :forbidden unless current_user&.author_of?(question)
