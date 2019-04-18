@@ -4,6 +4,8 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :answers_author!, only: %i[update destroy]
 
+  after_action :publish_answer, only: %i[create]
+
   include Voted
 
   def create
@@ -36,6 +38,22 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    files = []
+    answer.files.each do |file|
+      files << { url: url_for(file), name: file.filename.to_s }
+    end
+
+    ActionCable.server.broadcast(
+        "answer_for_question_#{answer.question_id}",
+        { answer: answer,
+          links: answer.links,
+          files: files }
+    )
+  end
 
   def answers_author!
     head :forbidden unless current_user&.author_of?(answer)

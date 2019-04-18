@@ -13,8 +13,12 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answers = question.answers.includes(:links).with_attached_files.order(best: :desc)
     @answer = question.answers.new
     @answer.links.new
+
+    gon.push question_id: question.id
+    gon.push user_id: current_user&.id
   end
 
   def new
@@ -51,10 +55,7 @@ class QuestionsController < ApplicationController
     return if @question.errors.any?
     ActionCable.server.broadcast(
         'questions',
-        ApplicationController.render(
-        partial: 'questions/question',
-        locals: { question: @question}
-        )
+        { question: question }
     )
   end
 

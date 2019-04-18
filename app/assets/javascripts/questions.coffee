@@ -3,12 +3,17 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
   questionsList = $(".questions")
+  questionId = $('.question').data('id')
 
   App.cable.subscriptions.create('QuestionsChannel', {
     connected: ->
-      @perform( 'follow', text: 'hello')
+      @perform('follow')
     ,
 
     received: (data) ->
-      questionsList.append data
+      questionData = JST['templates/question']({
+        question: data.question
+      })
+
+      questionsList.append questionData
   })
