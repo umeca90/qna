@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
+  after_action :publish_comment, only: %i[create]
 
   def create
     @comment = commented_object.comments.new(body: comment_params[:comment_body])
@@ -12,6 +13,18 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def room_id
+    commented_object.is_a?(Question) ? commented_object.id : commented_object.question.id
+  end
+
+  def publish_comment
+    return if @comment.errors.any?
+
+    ActionCable.server.broadcast(
+        "comments-#{room_id}", { comment: @comment }
+    )
+  end
 
   def comment_params
     params.require(:comment).permit(:comment_body)

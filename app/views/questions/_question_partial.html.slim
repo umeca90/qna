@@ -19,5 +19,6 @@ br
   .voting
     - if user_signed_in?
       = render 'votes/vote', resource: question
+
   .comment-block
     = render 'comments/form', resource: question

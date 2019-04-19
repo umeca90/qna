@@ -27,14 +27,13 @@ feature 'User can edit his answer', %q{
     end
 
     scenario 'as an author edits his answer', js: true do
-      within '.answers' do
+      within ".answer-#{answer.id}" do
         click_on 'Edit'
         fill_in 'Your answer', with: :edit_body
         click_on 'Save'
-
         expect(page).to_not have_content answer.body
         expect(page).to have_content :edit_body
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_content 'Your answer'
       end
     end
 
