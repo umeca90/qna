@@ -30,11 +30,10 @@ feature 'User can edit his question', %q{
         fill_in 'Title', with: 'new title'
         fill_in 'Body', with: 'new body'
         click_on 'Save question'
-
         expect(page).to_not have_content question.title
         expect(page).to_not have_content question.body
         expect(page).to have_content 'new title'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector 'text_field'
       end
     end
 
@@ -63,7 +62,7 @@ feature 'User can edit his question', %q{
         expect(page).to_not have_content question.title
         expect(page).to_not have_content question.body
         expect(page).to have_content 'new title'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector 'text_field'
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end

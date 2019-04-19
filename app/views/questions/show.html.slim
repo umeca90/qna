@@ -1,10 +1,10 @@
 .question[data-id="#{question.id}"]
   .question-errors
-  .answer-errors
-  .answer-update-errors
   = render 'question_partial'
 
 .answers
+  .answer-errors
+  .answer-update-errors
   = render @answers
 - if user_signed_in?
   = render 'answers/form'

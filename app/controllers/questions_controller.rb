@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
     @answers = question.answers.includes(:links).with_attached_files.order(best: :desc)
     @answer = question.answers.new
     @answer.links.new
+    @comment = Comment.new
 
     gon.push question_id: question.id
     gon.push user_id: current_user&.id
