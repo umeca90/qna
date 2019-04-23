@@ -1,7 +1,10 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
+
+  TEMP_EMAIL_REGEX = /@change.me/.freeze
+
+  devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:github]
+         :omniauthable, omniauth_providers: %i[github vkontakte instagram]
 
   has_many :answers, foreign_key: 'author_id', dependent: :destroy
   has_many :questions, foreign_key: 'author_id', dependent: :destroy
@@ -10,12 +13,18 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :authorizations, dependent: :destroy
 
+  validates :email, format: { without: TEMP_EMAIL_REGEX }, on: :update
+
   def self.find_for_oauth(auth)
     Services::FindForOauth.new(auth).call
   end
 
   def author_of?(object)
     object.author_id == id
+  end
+
+  def email_verified?
+    !email.match(TEMP_EMAIL_REGEX)
   end
 
   def create_authorization(auth)
