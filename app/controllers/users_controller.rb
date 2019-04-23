@@ -2,11 +2,9 @@ class UsersController < ApplicationController
   def finish_sign_up
     redirect_to root_path if user.email_verified?
 
-    if request.patch? && params[:user]
+    if request_is_patch?
       if user.update(user_params)
-        render 'users/finish_sign_up', notice: 'A confirmation email has been sent to your email address'
-      else
-        render 'users/finish_sign_up'
+        flash[:notice] = 'A confirmation email has been sent to your email address'
       end
     end
   end
@@ -21,5 +19,9 @@ class UsersController < ApplicationController
 
   def user
     @user ||= User.find(params[:id])
+  end
+
+  def request_is_patch?
+    request.patch? && params[:user]
   end
 end
