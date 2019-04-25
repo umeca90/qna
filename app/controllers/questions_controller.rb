@@ -8,7 +8,10 @@ class QuestionsController < ApplicationController
 
   include Voted
 
+  authorize_resource
+
   def index
+    authorize! :read, Question
     @questions = Question.all
   end
 
