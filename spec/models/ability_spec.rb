@@ -39,5 +39,23 @@ describe Ability do
 
     it { should be_able_to :update, answer }
     it { should_not be_able_to :update, answer2 }
+
+    it { should be_able_to :destroy, question }
+    it { should_not be_able_to :destroy, question2 }
+
+    it { should be_able_to :destroy, answer }
+    it { should_not be_able_to :destroy, answer2 }
+
+    it { should be_able_to :destroy, ActiveStorage::Attachment }
+
+    it { should be_able_to :destroy, create(:link, linkable: question) }
+    it { should_not be_able_to :destroy, create(:link, linkable: question2) }
+
+    it { should be_able_to :select_best, answer }
+
+    it { should be_able_to :vote_up, question2 }
+    it { should be_able_to :vote_down, question2 }
+    it { should_not be_able_to :vote_up, question }
+    it { should_not be_able_to :vote_down, question }
   end
 end

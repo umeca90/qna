@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+
+  skip_authorization_check
+
   def finish_sign_up
     redirect_to root_path if user.email_verified?
 

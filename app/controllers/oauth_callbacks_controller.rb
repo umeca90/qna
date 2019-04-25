@@ -1,6 +1,8 @@
 class OauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :oauth
 
+  skip_authorization_check
+
   def github; end
 
   def vkontakte; end
