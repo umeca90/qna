@@ -68,4 +68,45 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/questions/:id/answers/' do
+    let!(:question) { create(:question) }
+    let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    context 'create question with valid attributes' do
+      before { post api_path, params: { access_token: access_token.token,
+                                        answer: { body: 'Body', question: question, author: question.author } },
+                                        headers: headers  }
+
+      it_should_behave_like 'API ok status'
+
+      it 'saves new question into DB' do
+        expect(Answer.count).to eq 1
+      end
+
+      it 'returns fields of new answer with valid attributes' do
+        %w[id body created_at updated_at files links comments].each do |attr|
+          expect(json['answer'].has_key?(attr)).to be_truthy
+        end
+      end
+    end
+
+    context 'create answer with invalid attributes' do
+      before { post api_path, params: { access_token: access_token.token,
+                                        answer: attributes_for(:answer, :invalid) },
+                                        headers: headers  }
+      it 'return status' do
+        expect(response).to be_unprocessable
+      end
+
+      it 'returns error for body' do
+        expect(json.has_key?('body')).to be_truthy
+      end
+    end
+  end
 end
