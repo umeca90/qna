@@ -5,8 +5,9 @@ describe 'Profiles API', type: :request do
                     "ACCEPT" => "application/json" } }
 
   describe 'GET /api/v1/profiles/me' do
+    let(:api_path) { '/api/v1/profiles/me' }
+
     it_behaves_like 'API Authorizable' do
-      let(:api_path) { '/api/v1/profiles/me' }
       let(:method) { :get }
     end
 
@@ -14,11 +15,9 @@ describe 'Profiles API', type: :request do
       let(:me) { create :user }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
-      before { get '/api/v1/profiles/me', params: { access_token: access_token.token }, headers: headers }
+      before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
-      it 'returns 200 status' do
-        expect(response).to be_successful
-      end
+      it_should_behave_like 'API ok status'
 
       it 'reterns all public fields' do
         %w[id email admin created_at updated_at].each do |attr|
@@ -35,8 +34,9 @@ describe 'Profiles API', type: :request do
   end
 
   describe 'GET /api/v1/profiles/' do
+    let(:api_path) { '/api/v1/profiles/' }
+
     it_behaves_like 'API Authorizable' do
-      let(:api_path) { '/api/v1/profiles/' }
       let(:method) { :get }
     end
 
@@ -47,7 +47,7 @@ describe 'Profiles API', type: :request do
       let(:user_response) { json['users'].first }
       let(:user) { users.first }
 
-      before { get '/api/v1/profiles/', params: { access_token: access_token.token }, headers: headers }
+      before { get api_path, params: { access_token: access_token.token }, headers: headers }
 
       it 'returns 200 status' do
         expect(response).to be_successful
