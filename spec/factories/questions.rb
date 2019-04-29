@@ -19,5 +19,11 @@ FactoryBot.define do
     trait :with_comments do
       after(:create) { |question| create(:comment, commentable: question, author: question.author) }
     end
+
+    trait :with_answers do
+      transient { answers_count { 3 } }
+
+      after(:create) { |question, evaluator| create_list(:answer, evaluator.answers_count, question: question) }
+    end
   end
 end
