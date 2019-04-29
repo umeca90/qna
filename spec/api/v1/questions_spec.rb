@@ -174,15 +174,12 @@ describe 'Questions API', type: :request do
     let!(:question) { create(:question) }
     let(:api_path) { "/api/v1/questions/#{question.id}" }
     let(:headers) { { "ACCEPT" => 'application/json' } }
+    let(:author_access_token) { create(:access_token, resource_owner_id: question.author.id) }
 
     it_behaves_like 'API Authorizable' do
       let(:method) { :delete }
     end
 
-    before { delete api_path, params: { access_token: access_token.token }, headers: headers  }
-
-    it 'destroy question' do
-      expect(Question.count).to eq 0
-    end
+    it_behaves_like 'API resource deletable', Question
   end
 end

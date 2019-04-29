@@ -1,4 +1,7 @@
 class Api::V1::AnswersController < Api::V1::BaseController
+
+  authorize_resource
+
   def index
     render json: answers, each_serialized: AnswersSerializer
   end
@@ -27,6 +30,8 @@ class Api::V1::AnswersController < Api::V1::BaseController
   end
 
   def destroy
+    authorize! :destroy, answer
+
     answer.destroy
   end
 
