@@ -12,4 +12,8 @@ class Api::V1::BaseController < ApplicationController
   def current_resource_owner_id
     doorkeeper_token.resource_owner_id
   end
+
+  def current_ability
+    @current_ability ||= Ability.new(current_resource_owner)
+  end
 end

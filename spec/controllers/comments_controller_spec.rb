@@ -1,19 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
-  let(:user) { create :user }
-  let(:question) { create :question, author: user }
-  let(:create_comment) {
-    post :create, params:
-        { question_id: question.id, comment: attributes_for(:comment)
-                                                  }, format: :json }
+  let(:question) { create(:question) }
+  let(:comment) { create(:comment) }
+  let(:user) { create(:user) }
+  let(:create_comment) { post :create, params: { comment: attributes_for(:comment),
+                                                 question_id: question.id,
+                                                 user_id: user.id }, format: :js }
 
   describe 'POST #create' do
     before { login(user) }
 
     context 'with valid attributes' do
       it 'saved a new comment in the db' do
-        expect { create_comment }.to change(Comment, :count).by 1
+        expect { create_comment }.to change(Comment, :count).by(1)
       end
 
       it 'user is author' do

@@ -135,9 +135,11 @@ describe 'Questions API', type: :request do
       let(:method) { :put }
     end
 
-    describe 'update question with valid attributes' do
-      context 'with valid attributes' do
-        before { patch api_path, params: { access_token: access_token.token,
+    describe 'author' do
+      let(:author_access_token) { create(:access_token, resource_owner_id: question.author.id) }
+
+      context 'update with valid attributes' do
+        before { patch api_path, params: { access_token: author_access_token.token,
                                            question: { body: 'New body' } },
                                            headers: headers  }
 
@@ -154,8 +156,8 @@ describe 'Questions API', type: :request do
         end
       end
 
-      context 'with invalid attributes' do
-        before { patch api_path, params: { access_token: access_token.token,
+      context 'update with invalid attributes' do
+        before { patch api_path, params: { access_token: author_access_token.token,
                                            question: { title: nil } },
                                            headers: headers  }
 
@@ -165,6 +167,21 @@ describe 'Questions API', type: :request do
 
         it 'returns error for title' do
           expect(json.has_key?('title')).to be_truthy
+        end
+
+        it 'verifies that questions body was not change' do
+          question.reload
+          expect(question.body).to eq 'MyText'
+        end
+      end
+
+      context 'unable to edit another users question' do
+        before { put api_path, params: { access_token: access_token.token,
+                                         question: { body: 'Edit' } },
+                                         headers: headers  }
+
+        it 'returns forbidden status' do
+          expect(response).to be_forbidden
         end
       end
     end

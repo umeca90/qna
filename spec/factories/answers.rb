@@ -24,7 +24,7 @@ FactoryBot.define do
     end
 
     trait :with_comments do
-      after(:create) { |answer| create(:comment, commentable: answer, author: answer.author) }
+      after(:create) { |answer| create(:answer_comment, commentable: answer, author: answer.author) }
     end
   end
 end

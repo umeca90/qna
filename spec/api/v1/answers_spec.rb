@@ -118,36 +118,54 @@ describe 'Answers API', type: :request do
     it_behaves_like 'API Authorizable' do
       let(:method) { :put }
     end
+    describe 'Author' do
+      let(:author_access_token) { create(:access_token, resource_owner_id: answer.author.id) }
 
-    context 'update answer with valid attributes' do
-      before { put api_path, params: { access_token: access_token.token,
-                                       answer: { body: 'New body' } },
-                                       headers: headers  }
+      context 'update answer with valid attributes' do
+        before { patch api_path, params: { access_token: author_access_token.token,
+                                         answer: { body: 'New body' } },
+                                         headers: headers  }
 
-      it_should_behave_like 'API ok status'
+        it_should_behave_like 'API ok status'
 
-      it 'returns fields of updated answer' do
-        %w[id body created_at updated_at files links comments].each do |attr|
-          expect(json['answer'].has_key?(attr)).to be_truthy
+        it 'returns fields of updated answer' do
+          %w[id body created_at updated_at files links comments].each do |attr|
+            expect(json['answer'].has_key?(attr)).to be_truthy
+          end
+        end
+
+        it 'verifies that answer was updated' do
+          expect(json['answer']['body']).to eq 'New body'
         end
       end
 
-      it 'verifies that answer was updated' do
-        expect(json['answer']['body']).to eq 'New body'
-      end
-    end
+      context 'update answer with invalid attributes' do
+        before { patch api_path, params: { access_token: author_access_token.token,
+                                           answer: { body: nil } },
+                                           headers: headers  }
 
-    context 'update answer with invalid attributes' do
-      before { patch api_path, params: { access_token: access_token.token,
-                                         answer: { body: nil } },
+        it 'returns unprocessable status' do
+          expect(response).to be_unprocessable
+        end
+
+        it 'returns error for body' do
+          expect(json.has_key?('body')).to be_truthy
+        end
+
+        it 'verefies that answers body was not changed' do
+          answer.reload
+          expect(answer.body).to eq 'MyTextAnswer'
+        end
+      end
+
+      context 'unable edit other users answer' do
+        before { patch api_path, params: { access_token: access_token.token,
+                                         question: { body: 'Edit' } },
                                          headers: headers  }
 
-      it 'returns unprocessable status' do
-        expect(response).to be_unprocessable
-      end
-
-      it 'returns error for body' do
-        expect(json.has_key?('body')).to be_truthy
+        it 'returns forbidden status' do
+          expect(response).to be_forbidden
+        end
       end
     end
   end
@@ -162,7 +180,7 @@ describe 'Answers API', type: :request do
     it_behaves_like 'API Authorizable' do
       let(:method) { :delete }
     end
-    
+
     it_behaves_like 'API resource deletable', Answer
   end
 end
