@@ -18,6 +18,15 @@ class Api::V1::QuestionsController < Api::V1::BaseController
       render json: question.errors, status: :unprocessable_entity
     end
   end
+
+  def update
+    if question.update(question_params)
+      render json: question, status: :ok
+    else
+      render json: question.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def questions

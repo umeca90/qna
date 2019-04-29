@@ -94,8 +94,8 @@ describe 'Questions API', type: :request do
     describe 'create question' do
       context 'with valid attributed' do
         before { post api_path, params: { question: attributes_for(:question),
-                                          access_token: access_token.token,
-                                          headers: headers } }
+                                          access_token: access_token.token },
+                                          headers: headers }
 
         it_should_behave_like 'API ok status'
 
@@ -107,6 +107,64 @@ describe 'Questions API', type: :request do
           %w[id title body created_at updated_at].each do |attr|
             expect(json['question'].has_key?(attr)).to be_truthy
           end
+        end
+      end
+
+      context 'with invalid attributes' do
+        before { post api_path, params: { question: attributes_for(:question, :invalid),
+                                          access_token: access_token.token },
+                                          headers: headers }
+
+        it 'returns unprocessable status' do
+          expect(response).to be_unprocessable
+        end
+
+        it 'returns error for title' do
+          expect(json.has_key?('title')).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions/:id' do
+    let!(:question) { create(:question) }
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+    let(:headers) { { "ACCEPT" => 'application/json' } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :put }
+    end
+
+    describe 'update question with valid attributes' do
+      context 'with valid attributes' do
+        before { patch api_path, params: { access_token: access_token.token,
+                                           question: { body: 'New body' } },
+                                           headers: headers  }
+
+        it_should_behave_like 'API ok status'
+
+        it 'returns modified question fields ' do
+          %w[id title body created_at updated_at files links comments].each do |attr|
+            expect(json['question'].has_key?(attr)).to be_truthy
+          end
+        end
+
+        it 'verifies that questions body was updated' do
+          expect(json['question']['body']).to eq 'New body'
+        end
+      end
+
+      context 'with invalid attributes' do
+        before { patch api_path, params: { access_token: access_token.token,
+                                           question: { title: nil } },
+                                           headers: headers  }
+
+        it 'returns unprocessable status' do
+          expect(response).to be_unprocessable
+        end
+
+        it 'returns error for title' do
+          expect(json.has_key?('title')).to be_truthy
         end
       end
     end
