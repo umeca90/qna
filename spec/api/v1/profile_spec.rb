@@ -5,6 +5,11 @@ describe 'Profiles API', type: :request do
                     "ACCEPT" => "application/json" } }
 
   describe 'GET /api/v1/profiles/me' do
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { '/api/v1/profiles/me' }
+      let(:method) { :get }
+    end
+
     context 'unauthorized' do
       it 'returns 401 if there is no access_token' do
         get '/api/v1/profiles/me', headers: headers
