@@ -109,4 +109,63 @@ describe 'Answers API', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let!(:answer) { create(:answer, question: question) }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+    let(:headers) { { "ACCEPT" => 'application/json' } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :put }
+    end
+
+    context 'update answer with valid attributes' do
+      before { put api_path, params: { access_token: access_token.token,
+                                       answer: { body: 'New body' } },
+                                       headers: headers  }
+
+      it_should_behave_like 'API ok status'
+
+      it 'returns fields of updated answer' do
+        %w[id body created_at updated_at files links comments].each do |attr|
+          expect(json['answer'].has_key?(attr)).to be_truthy
+        end
+      end
+
+      it 'verifies that answer was updated' do
+        expect(json['answer']['body']).to eq 'New body'
+      end
+    end
+
+    context 'update answer with invalid attributes' do
+      before { patch api_path, params: { access_token: access_token.token,
+                                         answer: { body: nil } },
+                                         headers: headers  }
+
+      it 'returns unprocessable status' do
+        expect(response).to be_unprocessable
+      end
+
+      it 'returns error for body' do
+        expect(json.has_key?('body')).to be_truthy
+      end
+    end
+  end
+
+  describe 'DELETE /api/v1/answers/:id/' do
+    let!(:question) { create :question }
+    let!(:answer) { create(:answer, question: question) }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+    let(:headers) { { "ACCEPT" => 'application/json' } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :delete }
+    end
+
+    before { delete api_path, params: { access_token: access_token.token }, headers: headers  }
+
+    it 'destroy answer' do
+      expect(Answer.count).to eq 0
+    end
+  end
 end

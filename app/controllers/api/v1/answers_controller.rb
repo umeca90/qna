@@ -18,6 +18,18 @@ class Api::V1::AnswersController < Api::V1::BaseController
     end
   end
 
+  def update
+    if answer.update(answer_params)
+      render json: answer, status: :ok
+    else
+      render json: answer.errors, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    answer.destroy
+  end
+
   private
 
   def answers
