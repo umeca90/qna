@@ -82,4 +82,33 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'POST api/v1/questions' do
+    let(:api_path) { '/api/v1/questions' }
+    let(:headers) { { "ACCEPT" => "application/json" } }
+
+    it_behaves_like 'API Authorizable' do
+      let(:method) { :post }
+    end
+
+    describe 'create question' do
+      context 'with valid attributed' do
+        before { post api_path, params: { question: attributes_for(:question),
+                                          access_token: access_token.token,
+                                          headers: headers } }
+
+        it_should_behave_like 'API ok status'
+
+        it 'saves new question into DB' do
+          expect(Question.count).to eq 1
+        end
+
+        it 'returns fields of new question' do
+          %w[id title body created_at updated_at].each do |attr|
+            expect(json['question'].has_key?(attr)).to be_truthy
+          end
+        end
+      end
+    end
+  end
 end
