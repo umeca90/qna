@@ -75,7 +75,11 @@ class QuestionsController < ApplicationController
     @answer = question.answers.new
   end
 
-  helper_method :question
+  helper_method :question, :subscription
+
+  def subscription
+    @subscription ||= question.subscriptions.find_by(user: current_user)
+  end
 
   def question_params
     params.require(:question).permit(:title, :body,

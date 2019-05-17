@@ -17,11 +17,15 @@ class Question < ApplicationRecord
   belongs_to :author, class_name: 'User'
   validates :title, :body, presence: true
 
-  after_create :calculate_reputation
+  after_create :calculate_reputation, :subscribe_author
 
   private
 
   def calculate_reputation
     ReputationJob.perform_later(self)
+  end
+
+  def subscribe_author
+    subscriptions.create(user: author)
   end
 end

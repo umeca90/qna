@@ -12,7 +12,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  after_create :notify_questions_author
+  after_create :notify_about_new_answer
 
   scope :sort_by_best, -> { order(best: :desc) }
 
@@ -26,7 +26,7 @@ class Answer < ApplicationRecord
 
   private
 
-  def notify_questions_author
-    NewAnswerNotifierMailer.notify_about_new_answer(self).deliver_later
+  def notify_about_new_answer
+    NewAnswerNotifierJob.perform_later(self)
   end
 end

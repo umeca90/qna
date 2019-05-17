@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: %i[votable commentable] do
+    resources :subscriptions, shallow: true, only: %i[create destroy]
     resources :answers, shallow: true, only: %i[create update destroy], concerns: %i[votable commentable] do
       patch 'select_best', on: :member
     end

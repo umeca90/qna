@@ -54,8 +54,8 @@ RSpec.describe Answer, type: :model do
       let(:question) { create :question }
 
       it 'notifies author of question when new answer posted to it' do
-        expect(NewAnswerNotifierMailer).to receive(:notify_about_new_answer).and_call_original
-        create(:answer, question: question, author: user)
+        expect(NewAnswerNotifierJob).to receive(:perform_later).with(instance_of(Answer))
+        Answer.create(question: question, author: user, body: 'new answer')
       end
 
     end
