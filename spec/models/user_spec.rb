@@ -7,6 +7,8 @@ RSpec.describe User, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
   it { should have_many(:comments).dependent(:destroy) }
   it { should have_many(:authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
+  it { should have_many(:subscribed_questions).through(:subscriptions) }
 
   it { should_not allow_value('qwerty@change.me').for(:email).on(:update) }
 
