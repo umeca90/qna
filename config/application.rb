@@ -12,7 +12,7 @@ module Qna
     config.load_defaults 5.2
 
     config.autoload_paths += [config.root.join('app')]
-
+    config.active_job.queue_adapter = :sidekiq
     config.action_cable.disable_request_forgery_protection = false
 
     config.generators do |g|
