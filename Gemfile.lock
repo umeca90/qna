@@ -49,8 +49,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
-    archive-zip (0.12.0)
-      io-like (~> 0.3.0)
     arel (9.0.0)
     autoprefixer-rails (9.5.1.1)
       execjs
@@ -96,9 +94,6 @@ GEM
       activesupport
     childprocess (1.0.1)
       rake (< 13.0)
-    chromedriver-helper (2.1.1)
-      archive-zip (~> 0.10)
-      nokogiri (~> 1.8)
     chronic (0.10.2)
     cocoon (1.2.12)
     coffee-rails (4.2.2)
@@ -147,7 +142,6 @@ GEM
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     innertube (1.1.0)
-    io-like (0.3.0)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     jmespath (1.4.0)
@@ -396,7 +390,6 @@ DEPENDENCIES
   cancancan
   capybara (>= 2.15)
   capybara-email
-  chromedriver-helper
   cocoon
   coffee-rails (~> 4.2)
   database_cleaner

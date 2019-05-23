@@ -28,5 +28,5 @@
 /config/database.yml
 .idea/
 .env
-config/*.sphinx.cong
-db/sphinx
+/config/*.sphinx.conf
+/db/sphinx

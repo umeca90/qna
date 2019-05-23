@@ -10,26 +10,27 @@ feature 'User can access search engine', %q{
   given!(:user) { create(:user, email: 'test1@mail.net') }
   given!(:question) { create(:question, body: 'some question') }
   given!(:answer)   { create(:answer,   body: 'some answer', question: question) }
-  given!(:comment) { create(:question_comment, body: 'some comment') }
+  given!(:comment) { create(:question_comment, body: 'some comment', commentable: question) }
 
-  describe 'Any user', js: true do
-    background do
-      visit root_path
-    end
+  background do
+    visit root_path
+  end
 
-    scenario 'Searches thru all models', js: true, sphinx: true do
+  scenario 'Searches thru all models', sphinx: true, js: true do
+    ThinkingSphinx::Test.run do
       click_on 'Find'
 
       within '.result-search' do
         expect(page).to have_content 'some question'
         expect(page).to have_content 'some answer'
         expect(page).to have_content 'some comment'
-        expect(page).to have_content 'test1@mail.ru'
-        save_and_open_page
+        expect(page).to have_content 'test1@mail.net'
       end
     end
+  end
 
-    scenario 'Searches thru questions', js: true, sphinx: true do
+  scenario 'Searches thru questions', sphinx: true, js: true do
+    ThinkingSphinx::Test.run do
       fill_in 'Search', with: 'question'
       check 'Question'
       click_on 'Find'
@@ -40,8 +41,10 @@ feature 'User can access search engine', %q{
         expect(page).to have_content 'some question'
       end
     end
+  end
 
-    scenario 'Searches thru answers', js: true, sphinx: true do
+  scenario 'Searches thru answers', sphinx: true, js: true do
+    ThinkingSphinx::Test.run do
       fill_in 'Search', with: 'answer'
       check 'Answer'
       click_on 'Find'
@@ -50,8 +53,10 @@ feature 'User can access search engine', %q{
         expect(page).to have_content 'some answer'
       end
     end
+  end
 
-    scenario 'Searches thru comments', js: true, sphinx: true do
+  scenario 'Searches thru comments', sphinx: true, js: true do
+    ThinkingSphinx::Test.run do
       fill_in 'Search', with: 'comment'
       check 'Comment'
       click_on 'Find'
@@ -60,19 +65,24 @@ feature 'User can access search engine', %q{
         expect(page).to have_content 'some comment'
       end
     end
+  end
 
-    scenario 'Searches thru users', js: true, sphinx: true do
+  scenario 'Searches thru users', sphinx: true, js: true do
+    ThinkingSphinx::Test.run do
       fill_in 'Search', with: 'test1'
-      check 'Comment'
+      check 'User'
       click_on 'Find'
 
       within '.result-search' do
-        expect(page).to have_content 'test1@mail.ru'
+        expect(page).to have_content 'test1@mail.net'
       end
     end
+  end
 
-    scenario 'No result', js: true, sphinx: true do
+  scenario 'No result', sphinx: true do
+    ThinkingSphinx::Test.run do
       fill_in 'Search', with: 'none'
+      check 'User'
       click_on 'Find'
 
       within '.result-search' do
