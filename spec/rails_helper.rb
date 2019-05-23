@@ -2,6 +2,8 @@
 require 'spec_helper'
 require 'capybara/email/rspec'
 require 'cancan/matchers'
+require 'webdrivers'
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
@@ -42,7 +44,7 @@ RSpec.configure do |config|
   config.include OmniauthMacros
   config.include ApiHelpers, type: :request
 
-  Capybara.javascript_driver = :selenium_chrome_headless
+  Capybara.javascript_driver = :selenium_chrome
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -86,5 +88,7 @@ end
 FactoryBot::SyntaxRunner.class_eval do
   include ActionDispatch::TestProcess
 end
+
+
 
 OmniAuth.config.test_mode = true
