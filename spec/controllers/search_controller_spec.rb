@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'sphinx_helper'
 
 RSpec.describe SearchController, type: :controller do
   let!(:question) { create(:question, body: 'question') }
@@ -6,14 +6,17 @@ RSpec.describe SearchController, type: :controller do
   let!(:comment) { create(:question, body: 'comment') }
 
   describe 'GET #search' do
-    before { get :search, params: { query: 'text' } }
+    ThinkingSphinx::Test.run do
 
-    it 'renders template' do
-      expect(response).to render_template :search
-    end
+      before { get :search, params: { query: 'text', question: 1 } }
 
-    it 'assigns @data' do
-      expect(assigns(:data)).to be_kind_of(ThinkingSphinx::Search)
+      it 'renders template' do
+        expect(response).to render_template :search
+      end
+
+      it 'assigns @data' do
+        expect(assigns(:data)).to be_kind_of(ThinkingSphinx::Search)
+      end
     end
   end
 end
