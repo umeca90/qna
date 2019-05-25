@@ -10,10 +10,13 @@ RSpec.describe Services::Search do
     subject.result(params_for_question)
   end
 
-  it 'searches for questions' do
-    expect(ThinkingSphinx).to receive(:search).with("text", {classes: [Question], :page=>nil, :per_page=>10})
-    subject.result(params_for_question)
+  %w(user question answer comment).each do |klass|
+    it "searches for #{klass}" do
+      expect(ThinkingSphinx).to receive(:search).with("text", {classes: ["#{klass}".classify.constantize], :page=>nil, :per_page=>10})
+      subject.result({"query"=>"text", "#{klass}"=>"1" })
+    end
   end
+
 
   it 'searches thru all models' do
     expect(ThinkingSphinx).to receive(:search).with("text", {classes: [], :page=>nil, :per_page=>10})
