@@ -77,9 +77,16 @@ group :development do
   gem 'capybara', '>= 2.15'
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'ed25519'
+  gem 'bcrypt_pbkdf', '~> 1.0.0.alpha1'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-passenger', require: false
 end
 
 group :test do
