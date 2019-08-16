@@ -1,24 +1,31 @@
-# README
+# Q&A
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Учебный проект от школы Thinknetica
 
-Things you may want to cover:
+# Цель проекта
+Cоздать ресурс, на котором пользователи могут задавать вопросы, отвечать на эти вопросы, давать комментарии и голосовать за лучьший ответ. К вопросам можно приложить ссылки либо файлы.
 
-* Ruby version
+# Аутентификация протокол OAuth
+Пользователи могут зарегистироваться и войти через соц сети.
 
-* System dependencies
+# Авторизация
+Реализована через гем cancancan.
 
-* Configuration
+# Рейтинг
+Автор вопроса, может выбрать лучший ответ.
 
-* Database creation
+Любой зарегистрированный пользователь может проголосовать за чужой вопрос.
 
-* Database initialization
+# Подписка и рассылка ActiveJob
+Пользователь может подписаться на вопрос о получение уведомлений о новых ответах на его почтовый адрес.
 
-* How to run the test suite
+# ActionCable
+Обновление ответов происходит автоматически, через websocket.
 
-* Services (job queues, cache servers, search engines, etc.)
+# Api 
+Реализован через гем doorkeeper.
+api/v1/questions/...
+api/v1/answers/...
 
-* Deployment instructions
+# Полнотекстовый поиск через Sphinx
 
-* ...
